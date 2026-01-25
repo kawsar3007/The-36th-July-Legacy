@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE 36th JULY LEGACY | OFFICIAL</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <style>
+        :root { --b-red: #ff0000; --b-yellow: #FCD535; --fb-gold: #f0c622; }
+        .map-container { width: 99.4%; margin: 20px auto; border: 1px solid #333; overflow: auto; background: #fff; position: relative; }
+        #search-marker { position: absolute; width: 50px; height: 50px; border: 5px solid #00ff00; box-sizing: border-box; display: none; z-index: 500; pointer-events: none; box-shadow: 0 0 20px #00ff00; animation: blink 0.7s infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
+        #legacy-tooltip { position: absolute; display: none; background: rgba(0,0,0,0.9); color: #fff; padding: 8px 12px; border-radius: 4px; border: 1px solid var(--b-yellow); z-index: 2000; pointer-events: none; font-size: 13px; }
+        .fb-icon { color: var(--fb-gold); font-size: 24px; transition: 0.3s; }
+        .fb-icon:hover { transform: scale(1.1); }
+    </style>
+</head>
+<body>
+<div id="legacy-tooltip"></div>
+<div class="top-nav">
+    <div style="display: flex; gap: 5px;">
+        <input type="number" id="pSearch" style="padding: 8px; border-radius: 4px; border: 1px solid #444; background: #000; color: #fff; width: 85px;" placeholder="Plot ID">
+        <button onclick="doSearch()" style="background: var(--b-red); color: #fff; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer;"><i class="fas fa-search"></i></button>
+    </div>
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <div class="pill" onclick="copyNum()">BKASH/NAGAD/ROCKET: 01756206213</div>
+        <a href="https://facebook.com/the36thjulylegacy" target="_blank" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
+            <span style="color: #848e9c; font-size: 11px; font-weight: bold;">JOIN OUR COMMUNITY</span>
+            <i class="fab fa-facebook fb-icon"></i>
+        </a>
+    </div>
+</div>
+<div class="hero">
+    <h1 class="shimmer-title">THE 36th JULY LEGACY</h1>
+    <p style="color: var(--b-yellow); font-weight: bold;">"Don't just watch history, be a part of it!"</p>
+    <div class="actions" style="margin-top: 20px;">
+        <a href="order.html" class="cta-gold">RESERVE MY PLOT (৳36)</a>
+        <a href="support.html" class="cta-outline">CUSTOMER SUPPORT</a>
+    </div>
+</div>
+<div class="map-container">
+    <div style="position: relative; width: 4000px;">
+        <div id="search-marker"></div>
+        <canvas id="mainCanvas"></canvas>
+    </div>
+</div>
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyCAdnfu2R82xbC7H85n_9mvQBE58X3TjbA",
+        authDomain: "the-5k-elite-legacy.firebaseapp.com",
+        databaseURL: "https://the-5k-elite-legacy-default-rtdb.firebaseio.com",
+        projectId: "the-5k-elite-legacy",
+        storageBucket: "the-5k-elite-legacy.firebasestorage.app",
+        messagingSenderId: "440824313752",
+        appId: "1:440824313752:web:2c93344dcfe2ba0a4c5ded"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    const cv = document.getElementById('mainCanvas'), ctx = cv.getContext('2d');
+    const bSize = 50, cols = 80, rows = 800; 
+    cv.width = cols * bSize; cv.height = rows * bSize;
+    let pixels = {};
+    function drawGrid() {
+        ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, cv.width, cv.height);
+        ctx.strokeStyle = "#e5e5e5"; ctx.lineWidth = 0.5;
+        for(let i=0; i<=cols; i++) { ctx.beginPath(); ctx.moveTo(i*bSize,0); ctx.lineTo(i*bSize,cv.height); ctx.stroke(); }
+        for(let j=0; j<=rows; j++) { ctx.beginPath(); ctx.moveTo(0,j*bSize); ctx.lineTo(cv.width,j*bSize); ctx.stroke(); }
+    }
+    db.ref('pixels').on('value', s => {
+        drawGrid(); pixels = s.val() || {};
+        Object.values(pixels).forEach(p => {
+            const id = parseInt(p.plotID)-1;
+            const x = (id % cols) * bSize, y = Math.floor(id / cols) * bSize;
+            let img = new Image(); img.crossOrigin="anonymous"; img.src=p.imageUrl;
+            img.onload = () => ctx.drawImage(img, x, y, bSize, bSize);
+        });
+    });
+    function doSearch() {
+        const id = document.getElementById('pSearch').value;
+        const marker = document.getElementById('search-marker');
+        if(!id || id < 1 || id > 64000) return alert("ID 1-64000 দিন");
+        const x = ((id-1)%cols)*bSize, y = Math.floor((id-1)/cols)*bSize;
+        marker.style.display="block"; marker.style.left=x+"px"; marker.style.top=y+"px";
+        marker.scrollIntoView({behavior:'smooth', block:'center'});
+    }
+    function copyNum() { navigator.clipboard.writeText("01756206213"); alert("Copied: 01756206213"); }
+</script>
+</body>
+</html>
