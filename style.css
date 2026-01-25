@@ -1,0 +1,7 @@
+:root { --b-yellow: #FCD535; --b-dark: #1E2329; --b-bg: #0B0E11; }
+body { background: var(--b-bg); color: #EAECEF; font-family: sans-serif; margin: 0; text-align: center; }
+.top-nav { display: flex; justify-content: space-between; padding: 12px 2%; background: var(--b-dark); border-bottom: 1px solid #333; align-items: center; }
+.pill { padding: 8px 15px; border: 1px solid var(--b-yellow); color: var(--b-yellow); border-radius: 4px; font-size: 11px; cursor: pointer; font-weight: bold; }
+.shimmer-title { font-size: 38px; font-weight: 900; color: #ff0000; margin-top: 30px; }
+.cta-gold { background: var(--b-yellow); color: #000; padding: 15px 30px; border-radius: 5px; font-weight: bold; text-decoration: none; display: inline-block; }
+.cta-outline { border: 1px solid #5e6673; color: #fff; padding: 15px 30px; border-radius: 5px; text-decoration: none; display: inline-block; margin-left: 10px; }
