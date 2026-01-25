@@ -2,25 +2,44 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>RESERVE | THE 36th JULY LEGACY</title>
+    <title>RESERVE YOUR PLOT | THE 36th JULY LEGACY</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
-        body { background: #0B0E11; color: #fff; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .box { background: #1E2329; padding: 30px; border-radius: 15px; border: 2px solid #FCD535; text-align: center; width: 350px; }
-        input { width: 100%; padding: 12px; margin: 10px 0; background: #2B3139; border: 1px solid #444; color: #fff; border-radius: 5px; outline: none; }
-        .valid { border-color: #2ebd85 !important; }
-        .invalid { border-color: #ff0000 !important; }
-        #sBtn { width: 100%; padding: 15px; background: #555; color: #fff; border: none; border-radius: 5px; cursor: not-allowed; font-weight: bold; }
+        body { background: #0B0E11; color: #fff; font-family: sans-serif; overflow: hidden; margin:0; }
+        
+        /* ৬৪ জেলার আবছা ব্যাকগ্রাউন্ড */
+        .districts-bg {
+            position: absolute; width: 100%; height: 100%; top:0; left:0;
+            color: rgba(252, 213, 53, 0.05); font-size: 10px; line-height: 20px;
+            pointer-events: none; text-align: justify; padding: 10px; overflow: hidden;
+            z-index: 1; text-transform: uppercase;
+        }
+
+        .container { position: relative; z-index: 10; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .box { background: #1E2329; padding: 40px; border-radius: 15px; border: 2px solid #FCD535; text-align: center; width: 380px; }
+        input { width: 100%; padding: 14px; margin: 10px 0; background: #2B3139; border: 1px solid #444; color: #fff; border-radius: 5px; outline: none; box-sizing: border-box; }
+        #sBtn { width: 100%; padding: 15px; background: #555; color: #fff; border: none; border-radius: 5px; cursor: not-allowed; font-weight: bold; font-size: 16px; }
         .active-btn { background: #FCD535 !important; color: #000 !important; cursor: pointer !important; }
+        #msg { font-size: 12px; margin-bottom: 10px; display: block; }
     </style>
 </head>
 <body>
-    <div class="box" id="form-box">
-        <h2 style="color:#FCD535;">RESERVE PLOT</h2>
-        <input type="text" id="name" placeholder="Enter Brand/Your Name">
-        <input type="number" id="phone" placeholder="Your Phone Number" oninput="checkPhone()">
-        <p id="msg" style="font-size:12px; height:15px; margin:5px 0;"></p>
-        <button id="sBtn" disabled onclick="placeOrder()">SUBMIT ORDER</button>
+
+    <div class="districts-bg">
+        DHAKA CHATTOGRAM RAJSHAHI KHULNA SYLHET BARISHAL RANGPUR MYMENSINGH COMILLA NOAKHALI FENI COX'S BAZAR BOGURA GAZIPUR TANGAIL FARIDPUR MUNSHIGANJ NARSINGDI RAJBARI SHARIATPUR GOPALGANJ MADARIPUR KISHOREGANJ MANIKGANJ ... (Repeated 64 Districts) ...
+    </div>
+
+    <div class="container">
+        <div class="box" id="form-box">
+            <h2 style="color:#FCD535; margin-top:0;">RESERVE PLOT</h2>
+            <p style="font-size: 14px; color: #888;">PRICE: ৳36 ONLY</p>
+            <input type="text" id="name" placeholder="Enter Brand/Your Name">
+            <input type="number" id="phone" placeholder="Enter 11 Digit Mobile No" oninput="checkPhone()">
+            <span id="msg"></span>
+            <button id="sBtn" disabled onclick="placeOrder()">SUBMIT ORDER</button>
+            <br><br>
+            <a href="index.html" style="color:#888; text-decoration:none; font-size:13px;">← Back to Map</a>
+        </div>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -28,22 +47,28 @@
     <script>
         firebase.initializeApp({databaseURL: "https://the-5k-elite-legacy-default-rtdb.firebaseio.com"});
         const db = firebase.database();
+
         function checkPhone() {
-            const p = document.getElementById('phone').value, msg = document.getElementById('msg'), btn = document.getElementById('sBtn'), inp = document.getElementById('phone');
-            if(p.length < 11) { msg.innerText = ""; inp.className = ""; btn.disabled = true; btn.className = ""; return; }
+            const p = document.getElementById('phone').value, msg = document.getElementById('msg'), btn = document.getElementById('sBtn');
+            if(p.length < 11) { msg.innerText = ""; btn.disabled = true; btn.className = ""; return; }
+            
             db.ref('phones/' + p).once('value', s => {
                 if(s.exists()) {
-                    msg.innerText = "❌ এই নম্বরটি ব্যবহার করা হয়েছে!"; msg.style.color = "red"; inp.className = "invalid"; btn.disabled = true;
+                    msg.innerText = "❌ This number is already used!"; msg.style.color = "red"; btn.disabled = true;
                 } else {
-                    msg.innerText = "✅ নম্বরটি সঠিক!"; msg.style.color = "#2ebd85"; inp.className = "valid"; btn.disabled = false; btn.className = "active-btn";
+                    msg.innerText = "✅ Number available!"; msg.style.color = "#2ebd85"; btn.disabled = false; btn.className = "active-btn";
                 }
             });
         }
+
         function placeOrder() {
             const p = document.getElementById('phone').value, n = document.getElementById('name').value;
-            db.ref('orders/' + p).set({ name: n, phone: p, status: "Pending" }).then(() => {
+            if(!n) return alert("Please enter your name");
+            
+            db.ref('orders/' + p).set({ name: n, phone: p, status: "Pending", time: Date.now() }).then(() => {
                 db.ref('phones/' + p).set(true);
-                alert("Order Successful!");
+                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+                alert("Order Successful! Redirecting...");
                 window.location.href = "index.html";
             });
         }
