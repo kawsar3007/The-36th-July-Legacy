@@ -2,14 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>THE 36th JULY LEGACY | OFFICIAL</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <style>
-        #legacy-tooltip { position: absolute; display: none; background: rgba(0,0,0,0.9); color: #FCD535; padding: 8px 15px; border-radius: 5px; border: 1px solid #FCD535; z-index: 5000; pointer-events: none; font-size: 15px; font-weight: bold; }
-        #search-marker { position: absolute; width: 50px; height: 50px; border: 4px solid #00ff00; display: none; z-index: 1000; pointer-events: none; animation: blink 0.5s infinite; }
+        #legacy-tooltip { position: absolute; display: none; background: rgba(0,0,0,0.9); color: #FCD535; padding: 8px 15px; border-radius: 5px; border: 1px solid #FCD535; z-index: 9999; pointer-events: none; font-size: 15px; font-weight: bold; white-space: nowrap; }
+        #search-marker { position: absolute; width: 50px; height: 50px; border: 4px solid #00ff00; display: none; z-index: 1000; pointer-events: none; animation: blink 0.5s infinite; box-shadow: 0 0 15px #00ff00; }
         @keyframes blink { 50% { opacity: 0; } }
     </style>
 </head>
@@ -17,41 +18,52 @@
 <div id="legacy-tooltip"></div>
 <div class="top-nav">
     <div style="display:flex; gap:5px;">
-        <input type="number" id="phSearch" style="padding:8px; background:#000; color:#fff; border:1px solid #444;" placeholder="Search Phone Number">
-        <button onclick="searchByPhone()" style="background:#ff0000; color:#fff; border:none; padding:8px 12px; cursor:pointer;"><i class="fas fa-search"></i></button>
+        <input type="number" id="phSearch" style="padding:8px; background:#000; color:#fff; border:1px solid #444; border-radius:4px;" placeholder="Search Phone">
+        <button onclick="searchByPhone()" style="background:#ff0000; color:#fff; border:none; padding:8px 12px; cursor:pointer; border-radius:4px;"><i class="fas fa-search"></i></button>
     </div>
     <div class="nav-right" style="display:flex; align-items:center; gap:15px;">
-        <div class="pill" onclick="navigator.clipboard.writeText('01756206213'); alert('Copied!')">BKASH: 01756206213</div>
+        <div class="pill" onclick="navigator.clipboard.writeText('01756206213'); alert('Copied!')">BKASH/NAGAD: 01756206213</div>
         <a href="https://facebook.com/the36thjulylegacy" target="_blank"><i class="fab fa-facebook" style="color:#FCD535; font-size:24px;"></i></a>
     </div>
 </div>
 
 <div class="hero">
     <h1 class="shimmer-title">THE 36th JULY LEGACY</h1>
-    <p style="color: #FCD535; font-weight: bold; font-size: 18px;">"৳36 is not just a price, it's your signature on the history of Bangladesh. Permanent display, Permanent Pride."</p>
+    <p style="color: #FCD535; font-weight: bold;">"৳36 is not just a price, it's your signature on the history of Bangladesh."</p>
     <div class="actions">
         <a href="order.html" class="cta-gold">RESERVE MY PLOT (৳36)</a>
         <button onclick="downloadMap()" class="cta-outline"><i class="fas fa-camera"></i> DOWNLOAD MAP</button>
     </div>
 </div>
 
-<div class="map-container">
-    <div style="position:relative; width:4000px;">
+<div class="map-container" id="map-scroll">
+    <div style="position:relative; width:4000px; height:40000px;">
         <div id="search-marker"></div>
         <canvas id="mainCanvas"></canvas>
     </div>
 </div>
 
 <script>
-    const firebaseConfig = { apiKey: "AIzaSyCAdnfu2R82xbC7H85n_9mvQBE58X3TjbA", databaseURL: "https://the-5k-elite-legacy-default-rtdb.firebaseio.com" };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database(), cv = document.getElementById('mainCanvas'), ctx = cv.getContext('2d');
+    const firebaseConfig = { 
+        apiKey: "AIzaSyCAdnfu2R82xbC7H85n_9mvQBE58X3TjbA",
+        databaseURL: "https://the-5k-elite-legacy-default-rtdb.firebaseio.com" 
+    };
+    if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+    const db = firebase.database();
+    const cv = document.getElementById('mainCanvas'), ctx = cv.getContext('2d');
     const bSize = 50, cols = 80; cv.width = cols * bSize; cv.height = 800 * bSize;
     let pixels = {};
 
-    db.ref('pixels').on('value', s => {
-        pixels = s.val() || {};
+    function drawGrid() {
         ctx.fillStyle = "#ffffff"; ctx.fillRect(0,0,cv.width,cv.height);
+        ctx.strokeStyle = "#eee"; ctx.lineWidth = 0.5;
+        for(let i=0; i<=cols; i++) { ctx.beginPath(); ctx.moveTo(i*bSize,0); ctx.lineTo(i*bSize,cv.height); ctx.stroke(); }
+        for(let j=0; j<=800; j++) { ctx.beginPath(); ctx.moveTo(0,j*bSize); ctx.lineTo(cv.width,j*bSize); ctx.stroke(); }
+    }
+
+    db.ref('pixels').on('value', s => {
+        drawGrid();
+        pixels = s.val() || {};
         Object.values(pixels).forEach(p => {
             const id = parseInt(p.plotID)-1, x = (id%cols)*bSize, y = Math.floor(id/cols)*bSize;
             let img = new Image(); img.crossOrigin="anonymous"; img.src=p.imageUrl;
@@ -95,12 +107,12 @@
             const m = document.getElementById('search-marker');
             m.style.display="block"; m.style.left=x+"px"; m.style.top=y+"px";
             m.scrollIntoView({behavior:'smooth', block:'center'});
-        } else { alert("নম্বরটি খুঁজে পাওয়া যায়নি!"); }
+        } else { alert("Not Found!"); }
     }
 
     function downloadMap() {
         const link = document.createElement('a');
-        link.download = 'july-legacy.png';
+        link.download = 'legacy-map.png';
         link.href = cv.toDataURL("image/png");
         link.click();
     }
