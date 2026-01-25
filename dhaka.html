@@ -8,114 +8,143 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --b-bg: #0B0E11; --b-card: #1E2329; --b-yellow: #FCD535; }
-        body { background: var(--b-bg); color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; text-align: center; scroll-behavior: smooth; }
+        body { background: var(--b-bg); color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; text-align: center; scroll-behavior: smooth; overflow-x: hidden; }
 
-        .main-headline { background: #000; color: var(--b-yellow); padding: 15px; font-size: 28px; font-weight: 900; text-transform: uppercase; border-bottom: 1px solid #333; }
+        .main-headline { background: #000; color: var(--b-yellow); padding: 15px; font-size: 26px; font-weight: 900; text-transform: uppercase; border-bottom: 1px solid #333; }
 
-        /* সার্চ বার স্টাইল */
-        .search-section { background: #181d23; padding: 15px; display: flex; justify-content: center; gap: 10px; }
-        .search-section input { width: 250px; padding: 10px; border-radius: 5px; border: 1px solid #444; background: #0b0e11; color: #fff; outline: none; }
-        .search-section input:focus { border-color: var(--b-yellow); }
-        .search-btn { background: var(--b-yellow); color: #000; border: none; padding: 10px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; }
-
-        .top-nav { position: sticky; top: 0; background: var(--b-card); padding: 10px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--b-yellow); z-index: 1000; }
+        /* পেমেন্ট ও বাই সেকশন লোগো স্টাইল */
+        .top-nav { position: sticky; top: 0; background: var(--b-card); padding: 12px 3%; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--b-yellow); z-index: 1000; }
         
-        .payment-section { display: flex; align-items: center; gap: 10px; cursor: pointer; }
-        .house-logo { width: 40px; height: 40px; background: #fff; border-radius: 50%; padding: 5px; }
-        .pay-details b { font-size: 16px; color: var(--b-yellow); }
+        .legacy-btn { display: flex; align-items: center; gap: 10px; background: #161a1e; padding: 8px 15px; border-radius: 50px; border: 1px solid #333; cursor: pointer; transition: 0.3s; text-decoration: none; color: #fff; }
+        .legacy-btn:hover { border-color: var(--b-yellow); }
+        .gold-icon { width: 35px; height: 35px; background: var(--b-yellow); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #000; font-size: 18px; box-shadow: 0 0 10px rgba(252, 213, 53, 0.5); }
 
-        .canvas-container { width: 100%; margin-top: 5px; background: #fff; position: relative; }
-        canvas { display: block; width: 100%; height: auto; }
+        /* সার্চবার */
+        .search-bar { background: #0b0e11; padding: 15px; display: flex; justify-content: center; gap: 5px; border-bottom: 1px solid #222; }
+        .search-bar input { width: 200px; padding: 12px; border-radius: 5px; border: 1px solid #444; background: #1e2329; color: #fff; outline: none; }
+        .search-bar button { background: var(--b-yellow); border: none; padding: 12px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; }
 
-        /* হাইলাইট মার্কার */
-        #highlightMarker { position: absolute; width: 50px; height: 50px; border: 4px solid var(--b-yellow); box-shadow: 0 0 20px var(--b-yellow); display: none; pointer-events: none; z-index: 5; }
+        /* ক্যানভাস ও ফিক্সড হাইলাইট */
+        .canvas-container { width: 1000px; margin: 0 auto; background: #fff; position: relative; border-left: 1px solid #ddd; border-right: 1px solid #ddd; }
+        canvas { display: block; }
+        #plotMarker { 
+            position: absolute; width: 46px; height: 46px; 
+            border: 4px solid var(--b-yellow); 
+            box-shadow: 0 0 25px var(--b-yellow); 
+            display: none; pointer-events: none; z-index: 100;
+            background: rgba(252, 213, 53, 0.2);
+        }
 
-        /* পপআপ ও অন্যান্য স্টাইল আগের মতোই থাকবে... */
+        /* মোডাল ও সাপোর্ট */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; justify-content: center; align-items: center; }
-        .modal-box { background: var(--b-card); padding: 35px; border-radius: 15px; width: 90%; max-width: 400px; border: 2px solid var(--b-yellow); }
-        .modal-box.success { background: var(--b-yellow) !important; color: #000; }
-        .wa-support { position: fixed; bottom: 30px; right: 30px; background: #2ebd85; color: white; padding: 15px 25px; border-radius: 50px; text-decoration: none; font-weight: bold; z-index: 2000; }
+        .modal-box { background: var(--b-card); padding: 30px; border-radius: 15px; width: 350px; border: 1px solid var(--b-yellow); }
+        input[type="text"], input[type="number"] { width: 100%; padding: 12px; margin: 10px 0; background: #2b3139; border: 1px solid #444; color: #fff; border-radius: 5px; box-sizing: border-box; }
+        
+        .wa-support { position: fixed; bottom: 25px; right: 25px; background: #2ebd85; color: #fff; padding: 12px 22px; border-radius: 50px; text-decoration: none; font-weight: bold; display: flex; align-items: center; gap: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); z-index: 2000; }
     </style>
 </head>
-<body id="mainBody">
+<body id="b">
 
-<div class="main-headline">DISTRICT LEGACY MAP</div>
+<div class="main-headline">DHAKA DISTRICT LEGACY</div>
 
-<div class="search-section">
-    <input type="number" id="findPlotInput" placeholder="Enter Plot Number (1-10000)">
-    <button class="search-btn" onclick="searchPlot()">FIND PLOT</button>
+<div class="search-bar">
+    <input type="number" id="ps" placeholder="Enter Plot ID (1-10000)">
+    <button onclick="findP()">FIND PLOT</button>
 </div>
 
 <div class="top-nav">
-    <div class="payment-section" onclick="copyPaymentNum()">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/3/30/The_White_House_Icon.svg" class="house-logo">
-        <div class="pay-details">
-            <span style="font-size: 10px; display: block; color: #848e9c;">BKASH/NAGAD/ROCKET (COPY)</span>
-            <b>01756206213</b>
+    <div class="legacy-btn" onclick="copyN()">
+        <div class="gold-icon"><i class="fas fa-university"></i></div>
+        <div style="text-align: left;"><span style="font-size: 10px; color: #848e9c; display: block;">PAYMENT NUMBER</span><b>01756206213</b></div>
+    </div>
+    
+    <div class="legacy-btn" onclick="openO()" style="background: var(--b-yellow); color: #000;">
+        <div class="gold-icon" style="background: #000; color: var(--b-yellow);"><i class="fas fa-shopping-cart"></i></div>
+        <b>BUY PLOT (৳36)</b>
+    </div>
+</div>
+
+<div class="canvas-container" id="cc">
+    <div id="plotMarker"></div>
+    <canvas id="lc"></canvas>
+</div>
+
+<div id="om" class="modal">
+    <div class="modal-box">
+        <h2 style="color:var(--b-yellow);">RESERVE PLOT</h2>
+        <input type="text" id="bn" placeholder="Your Brand Name">
+        <input type="number" id="pn" placeholder="Plot ID (1-10000)">
+        <button onclick="subO()" style="width:100%; background:var(--b-yellow); border:none; padding:15px; border-radius:5px; font-weight:bold; cursor:pointer;">SUBMIT ORDER</button>
+        <p onclick="closeO()" style="color:#666; cursor:pointer; margin-top:15px;">Cancel</p>
+    </div>
+</div>
+
+<div id="sm" class="modal">
+    <div class="modal-box" id="sb" style="text-align:left;">
+        <h2 id="st" style="text-align:center;">CREATOR SUPPORT</h2>
+        <div style="background:#0b0e11; padding:15px; border-radius:8px; font-size:13px; margin-bottom:15px;">
+            1. Payment Screenshot (৳36)<br>
+            2. Brand Name & Plot ID<br>
+            3. Image & Link for Plot
         </div>
-    </div>
-    <div style="display: flex; gap: 10px;">
-        <a href="index.html" style="color:#fff; text-decoration:none; padding:10px; border:1px solid #444; border-radius:5px; font-size:14px;">← HOME</a>
-        <button class="search-btn" style="background:var(--b-yellow); color:#000;" onclick="openOrder()">BUY PLOT (৳36)</button>
+        <a href="https://wa.me/8801576940717" target="_blank" style="display:block; background:#2ebd85; color:#fff; text-align:center; padding:15px; border-radius:5px; text-decoration:none; font-weight:bold;">CONTACT WHATSAPP</a>
+        <p onclick="location.reload()" style="text-align:center; color:#666; cursor:pointer; margin-top:15px;">Back to Map</p>
     </div>
 </div>
 
-<div class="canvas-container" id="cHolder">
-    <div id="highlightMarker"></div>
-    <canvas id="legacyCanvas"></canvas>
-</div>
-
-<div id="orderModal" class="modal">...</div>
-<div id="supportModal" class="modal">...</div>
-
-<a href="javascript:void(0)" class="wa-support" onclick="openSupportDirect()">
-    <i class="fab fa-whatsapp"></i> LIVE SUPPORT
+<a href="https://wa.me/8801576940717" class="wa-support" target="_blank">
+    <i class="fab fa-whatsapp" style="font-size: 22px;"></i> LIVE SUPPORT
 </a>
 
 <script>
-    const cv = document.getElementById('legacyCanvas');
-    const ctx = cv.getContext('2d');
-    const bSize = 50; 
-    const cols = Math.floor(window.innerWidth / bSize); // স্ক্রিন অনুযায়ী কয়টা কলাম হবে
-    
-    cv.width = window.innerWidth;
-    cv.height = (10000 / cols) * bSize + 100;
+    const c = document.getElementById('lc'), ctx = c.getContext('2d'), bS = 50;
+    const cols = 20; // ১০০০ পিক্সেল / ৫০ = ২০টি কলাম (ফিক্সড ক্যালকুলেশন)
+    c.width = 1000; c.height = (10000/cols) * bS;
 
     function draw() {
-        ctx.fillStyle = "#fff"; ctx.fillRect(0,0,cv.width, cv.height);
-        ctx.strokeStyle = "#ddd"; ctx.lineWidth = 1;
-        for(let x=0; x<cv.width; x+=bSize){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,cv.height); ctx.stroke(); }
-        for(let y=0; y<cv.height; y+=bSize){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(cv.width,y); ctx.stroke(); }
+        ctx.fillStyle = "#fff"; ctx.fillRect(0,0,c.width, c.height);
+        ctx.strokeStyle = "#eee"; ctx.lineWidth = 1;
+        for(let x=0; x<=c.width; x+=bS){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,c.height); ctx.stroke(); }
+        for(let y=0; y<=c.height; y+=bS){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(c.width,y); ctx.stroke(); }
     }
     draw();
 
-    // সার্চ ফাংশন
-    function searchPlot() {
-        const pNum = document.getElementById('findPlotInput').value;
-        if(!pNum || pNum < 1 || pNum > 10000) return alert("Enter valid Plot ID (1-10000)");
-
-        const row = Math.floor((pNum - 1) / cols);
-        const col = (pNum - 1) % cols;
-        
-        const targetX = col * bSize;
-        const targetY = row * bSize;
-
-        // মার্কার সেট করা
-        const marker = document.getElementById('highlightMarker');
-        marker.style.display = 'block';
-        marker.style.left = targetX + "px";
-        marker.style.top = targetY + "px";
-
-        // অটো স্ক্রল টু সেই পজিশন
-        window.scrollTo({
-            top: cv.offsetTop + targetY - 200, // একটু উপরে থাকবে যাতে কাস্টমার দেখতে পায়
-            behavior: 'smooth'
-        });
+    // নিখুঁত সার্চ ক্যালকুলেশন
+    function findP() {
+        const n = document.getElementById('ps').value;
+        if(!n || n<1 || n>10000) return alert("Enter 1-10000");
+        const row = Math.floor((n-1)/cols), col = (n-1)%cols;
+        const m = document.getElementById('plotMarker');
+        m.style.display = 'block';
+        m.style.left = (col * bS) + "px";
+        m.style.top = (row * bS) + "px";
+        window.scrollTo({ top: c.offsetTop + (row * bS) - 250, behavior: 'smooth' });
     }
 
-    function copyPaymentNum() { navigator.clipboard.writeText("01756206213"); alert("Copied!"); }
-    function openOrder() { document.getElementById('orderModal').style.display='flex'; }
-    // ...বাকি ফাংশনগুলো আগের মতোই থাকবে...
+    function copyN() { navigator.clipboard.writeText("01756206213"); alert("Number Copied!"); }
+    function openO() { document.getElementById('om').style.display='flex'; }
+    function closeO() { document.getElementById('om').style.display='none'; }
+
+    function subO() {
+        const n = document.getElementById('bn').value, p = document.getElementById('pn').value;
+        if(!n || !p) return alert("Fill all!");
+        document.getElementById('om').style.display='none';
+        const sm = document.getElementById('sm'), sb = document.getElementById('sb'), bd = document.getElementById('b');
+        sm.style.display='flex'; sb.style.background = "var(--b-yellow)"; bd.style.background = "var(--b-yellow)";
+        document.getElementById('st').innerText = "SUCCESS! 🎉"; document.getElementById('st').style.color="#000";
+        
+        var end = Date.now() + 4000;
+        (function f() {
+            confetti({ particleCount: 10, angle: 60, spread: 70, origin: { x: 0, y: 0.6 }, colors:['#ff0000','#000'] });
+            confetti({ particleCount: 10, angle: 120, spread: 70, origin: { x: 1, y: 0.6 }, colors:['#ff0000','#000'] });
+            if (Date.now() < end) requestAnimationFrame(f);
+        }());
+        
+        setTimeout(() => { 
+            bd.style.background = "#0B0E11"; sb.style.background = "#1E2329"; 
+            document.getElementById('st').innerText = "CREATOR SUPPORT"; document.getElementById('st').style.color="var(--b-yellow)";
+        }, 4000);
+    }
 </script>
 </body>
 </html>
