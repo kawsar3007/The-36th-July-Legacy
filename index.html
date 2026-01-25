@@ -2,136 +2,63 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>THE 36th JULY LEGACY | BE A PART OF HISTORY</title>
+    <title>Digital Monument of Pride | THE 36th JULY LEGACY</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* District Grid Styling */
-        .district-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 15px;
-            padding: 40px 5%;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .district-card {
-            background: #1E2329;
-            border: 1px solid #333;
-            padding: 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.3s;
-            text-align: center;
-        }
-        .district-card:hover {
-            border-color: #FCD535;
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(252, 213, 53, 0.2);
-        }
-        .district-card h3 { margin: 0; font-size: 16px; color: #EAECEF; }
-        .district-card p { font-size: 11px; color: #FCD535; margin-top: 5px; }
+        .hero-section { text-align: center; padding: 100px 20px; background: radial-gradient(circle, #1E2329 0%, #0B0E11 100%); }
+        .hero-section h1 { font-size: 56px; color: #FCD535; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; }
+        .hero-section p { font-size: 22px; color: #EAECEF; max-width: 900px; margin: 0 auto 40px auto; line-height: 1.6; }
         
-        /* Highlight Class for Search */
-        .highlight {
-            border: 2px solid #FCD535 !important;
-            background: #2B3139 !important;
-            box-shadow: 0 0 20px rgba(252, 213, 53, 0.5);
+        .search-container { position: sticky; top: 0; background: #0B0E11; padding: 20px; z-index: 1000; border-bottom: 1px solid #333; text-align: center; }
+        .search-container input { padding: 15px 30px; width: 450px; border-radius: 50px; border: 2px solid #FCD535; background: #1E2329; color: #fff; font-size: 16px; outline: none; }
+        
+        .districts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; padding: 50px 5%; max-width: 1400px; margin: 0 auto; }
+        .district-card { 
+            background: #1E2329; border: 1px solid #333; padding: 30px 10px; border-radius: 15px; text-align: center; 
+            cursor: pointer; transition: all 0.4s ease; position: relative; overflow: hidden;
         }
+        .district-card::after { content: "CLAIM PLOT"; position: absolute; bottom: -40px; left: 0; width: 100%; background: #FCD535; color: #000; font-weight: bold; padding: 8px 0; transition: 0.3s; }
+        .district-card:hover { border-color: #FCD535; transform: translateY(-10px); box-shadow: 0 10px 20px rgba(252, 213, 53, 0.2); }
+        .district-card:hover::after { bottom: 0; }
+        .district-card h3 { color: #fff; margin: 0; font-size: 18px; text-transform: uppercase; }
+        .district-card span { color: #848e9c; font-size: 11px; margin-top: 5px; display: block; }
 
-        /* Sales Copy Section */
-        .sales-pitch {
-            max-width: 800px;
-            margin: 40px auto;
-            text-align: center;
-            padding: 0 20px;
-        }
-        .sales-pitch h2 { color: #FCD535; font-size: 32px; margin-bottom: 15px; }
-        .sales-pitch p { line-height: 1.6; color: #848e9c; font-size: 18px; }
-
-        /* Support Button Styling */
-        .support-float {
-            position: fixed; bottom: 20px; right: 20px; z-index: 1000;
-            background: #2ebd85; color: white; padding: 10px 20px;
-            border-radius: 50px; text-decoration: none; font-weight: bold;
-            display: flex; align-items: center; gap: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        }
+        .support-float { position: fixed; bottom: 30px; right: 30px; background: #2ebd85; color: #fff; padding: 15px 25px; border-radius: 50px; font-weight: bold; text-decoration: none; box-shadow: 0 5px 15px rgba(0,0,0,0.4); z-index: 2000; display: flex; align-items: center; gap: 10px; }
     </style>
 </head>
 <body>
 
-<a href="support.html" class="support-float">
-    <i class="fab fa-whatsapp" style="font-size: 24px;"></i>
-    <span>CUSTOMER SUPPORT</span>
-</a>
+<a href="support.html" class="support-float"><i class="fab fa-whatsapp"></i> CUSTOMER SUPPORT</a>
 
-<div class="top-nav">
-    <div style="display:flex; gap:10px;">
-        <input type="text" id="distSearch" style="padding:10px; width:300px; background:#1E2329; color:#fff; border:1px solid #444;" placeholder="Search Your District (e.g. Dhaka, Bogura)">
-        <button onclick="searchDistrict()" style="background:#FCD535; color:#000; border:none; padding:10px 20px; cursor:pointer; font-weight:bold;">FIND DISTRICT</button>
-    </div>
-    <div class="pill">FIXED PRICE: ৳36 PER PLOT</div>
+<div class="hero-section">
+    <h1>Digital Monument of Pride</h1>
+    <p>Represent your identity in the first-ever decentralized digital map of Bangladesh. <br> <span style="color: #FCD535;">Only 1,000 plots available per district.</span> Secure your legacy for just ৳36.</p>
+    <a href="#explore" class="cta-gold">EXPLORE DISTRICTS</a>
 </div>
 
-<div class="hero">
-    <h1 class="shimmer-title">THE 36th JULY LEGACY</h1>
-    
-    <div class="sales-pitch">
-        <h2>Don't Just Watch History—Be Part of It.</h2>
-        <p>
-            Every pixel on this map tells a story of pride and resilience. For only <b>৳36</b>, you can secure your digital legacy within your own district. 
-            <br><br>
-            <span style="color: #fff;">Only <b>1,000 plots</b> available per district. Once they're gone, they're gone forever.</span>
-        </p>
-    </div>
+<div class="search-container" id="explore">
+    <input type="text" id="distInput" placeholder="Enter your District (e.g. Bogura, Dhaka, Sylhet)..." onkeyup="filterDistricts()">
 </div>
 
-<div class="district-grid" id="grid">
-    <div class="district-card" data-name="dhaka" onclick="openDistrict('dhaka')">
+<div class="districts-grid" id="distList">
+    <div class="district-card" data-name="dhaka" onclick="location.href='dhaka.html'">
         <h3>DHAKA</h3>
-        <p>Limit: 1,000 Plots</p>
+        <span>1000 Plots Limited</span>
     </div>
-    <div class="district-card" data-name="bogura" onclick="openDistrict('bogura')">
+    <div class="district-card" data-name="bogura" onclick="location.href='bogura.html'">
         <h3>BOGURA</h3>
-        <p>Limit: 1,000 Plots</p>
-    </div>
-    <div class="district-card" data-name="sylhet" onclick="openDistrict('sylhet')">
-        <h3>SYLHET</h3>
-        <p>Limit: 1,000 Plots</p>
-    </div>
-    <div class="district-card" data-name="chattogram" onclick="openDistrict('chattogram')">
-        <h3>CHATTOGRAM</h3>
-        <p>Limit: 1,000 Plots</p>
+        <span>1000 Plots Limited</span>
     </div>
     </div>
-
-<footer style="background: #0B0E11; color: #848e9c; padding: 40px; text-align: center; border-top: 1px solid #333;">
-    <p style="color:#FCD535;">THE 36th JULY LEGACY © 2026 | Secured by Kawsar Ahmed</p>
-</footer>
 
 <script>
-    // Search function to highlight district
-    function searchDistrict() {
-        const query = document.getElementById('distSearch').value.toLowerCase();
-        const cards = document.querySelectorAll('.district-card');
-        let found = false;
-
+    function filterDistricts() {
+        let input = document.getElementById('distInput').value.toLowerCase();
+        let cards = document.querySelectorAll('.district-card');
         cards.forEach(card => {
-            card.classList.remove('highlight');
-            if(card.getAttribute('data-name').includes(query) && query !== "") {
-                card.classList.add('highlight');
-                card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                found = true;
-            }
+            card.style.display = card.dataset.name.includes(input) ? 'block' : 'none';
         });
-
-        if(!found && query !== "") alert("District not found! Please check the spelling.");
-    }
-
-    // Redirect to specific district page
-    function openDistrict(name) {
-        // প্রতিটি জেলার জন্য আলাদা ফাইল যেমন: dhaka.html, bogura.html
-        window.location.href = name + ".html";
     }
 </script>
 </body>
