@@ -2,101 +2,31 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RESERVE | THE DISTRICT LEGACY</title>
+    <title>RESERVE PLOT</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
-        :root { --b-bg: #0B0E11; --b-card: #1E2329; --b-yellow: #FCD535; }
-        body { background: var(--b-bg); color: #fff; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; transition: background 0.5s ease; }
-        
-        .box { background: var(--b-card); padding: 35px; border-radius: 15px; border: 2px solid var(--b-yellow); text-align: center; width: 90%; max-width: 380px; position: relative; z-index: 10; }
-        
-        .warning { background: rgba(252, 213, 53, 0.1); color: var(--b-yellow); padding: 15px; border-radius: 8px; font-size: 13px; margin-bottom: 25px; border: 1px solid var(--b-yellow); line-height: 1.5; text-align: left; }
-        
-        input { width: 100%; padding: 14px; margin: 12px 0; background: #2B3139; border: 1px solid #444; color: #fff; border-radius: 8px; font-size: 15px; box-sizing: border-box; outline: none; }
-        input:focus { border-color: var(--b-yellow); }
-        
-        .btn { width: 100%; padding: 16px; background: var(--b-yellow); color: #000; font-weight: bold; border: none; cursor: pointer; border-radius: 8px; font-size: 16px; transition: 0.3s; }
-        .btn:hover { opacity: 0.8; }
-
-        /* সাকসেস স্ক্রিন (শুরুতে লুকানো থাকবে) */
-        #celeb { display: none; position: fixed; inset: 0; flex-direction: column; justify-content: center; align-items: center; background: var(--b-yellow); color: #000; z-index: 100; text-align: center; }
-        #celeb h1 { font-size: 45px; margin: 0; text-transform: uppercase; }
-        #celeb p { font-size: 18px; font-weight: bold; margin-top: 10px; }
+        body { background: #0B0E11; color: #fff; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .box { background: #1E2329; padding: 30px; border-radius: 15px; border: 2px solid #FCD535; width: 350px; text-align: center; }
+        input { width: 100%; padding: 12px; margin: 10px 0; background: #2b3139; border: 1px solid #444; color: #fff; border-radius: 8px; box-sizing: border-box; }
+        .btn { width: 100%; padding: 15px; background: #FCD535; color: #000; font-weight: bold; border: none; cursor: pointer; border-radius: 8px; }
+        #success { display: none; position: fixed; inset: 0; background: #FCD535; color: #000; flex-direction: column; justify-content: center; align-items: center; z-index: 100; }
     </style>
 </head>
 <body>
-
-    <div class="box" id="f-box">
-        <div class="warning">
-            ⚠️ <strong>গুরুত্বপূর্ণ:</strong> প্লটের রক্ষণাবেক্ষণ ফি: <strong>৳৩৬</strong>। <br>
-            পেমেন্টের পর আপনার ব্র্যান্ডের নাম ও প্লট আইডি দিয়ে সাবমিট করুন।
-        </div>
-        
-        <h2 style="color:var(--b-yellow); margin-bottom: 20px;">RESERVE YOUR PLOT</h2>
-        
-        <input type="text" id="bn" placeholder="ব্র্যান্ডের নাম লিখুন">
-        <input type="number" id="pn" placeholder="প্লট আইডি (১-১০০০০)">
-        
-        <button class="btn" onclick="submitOrder()">SUBMIT REQUEST</button>
-        
-        <div style="margin-top: 20px;">
-            <a href="javascript:history.back()" style="color: #848e9c; text-decoration: none; font-size: 14px;">← পেছনে যান</a>
-        </div>
+    <div class="box" id="o-box">
+        <h2 style="color:#FCD535;">RESERVE PLOT (৳36)</h2>
+        <input type="text" id="bn" placeholder="ব্র্যান্ডের নাম">
+        <input type="number" id="pn" placeholder="প্লট নম্বর (১-১০০০০)">
+        <button class="btn" onclick="order()">SUBMIT ORDER</button>
     </div>
-
-    <div id="celeb">
-        <h1>SUCCESS! 🎉</h1>
-        <p>অভিনন্দন! আপনার অনুরোধটি গ্রহণ করা হয়েছে।</p>
-        <p style="font-size: 14px; opacity: 0.7;">কিছুক্ষণ অপেক্ষা করুন, আপনাকে সাপোর্ট পেজে নিয়ে যাওয়া হচ্ছে...</p>
-    </div>
-
+    <div id="success"><h1>SUCCESS! 🎉</h1><p>অপেক্ষা করুন, আপনাকে সাপোর্ট পেজে নিয়ে যাওয়া হচ্ছে...</p></div>
     <script>
-        function submitOrder() {
-            const name = document.getElementById('bn').value;
-            const plot = document.getElementById('pn').value;
-
-            // ভ্যালিডেশন
-            if(!name || !plot) {
-                alert("দয়া করে ব্র্যান্ডের নাম এবং প্লট আইডি উভয়ই লিখুন।");
-                return;
-            }
-            if(plot < 1 || plot > 10000) {
-                alert("প্লট আইডি ১ থেকে ১০,০০০ এর মধ্যে হতে হবে।");
-                return;
-            }
-
-            // সাকসেস ইফেক্ট শুরু
-            document.getElementById('f-box').style.display = 'none';
-            document.getElementById('celeb').style.display = 'flex';
-            document.body.style.background = "#FCD535"; // পুরো ব্যাকগ্রাউন্ড হলুদ
-
-            // রঙিন কাগজ ছিটানো (Confetti)
-            var duration = 5 * 1000;
-            var animationEnd = Date.now() + duration;
-            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 200 };
-
-            function randomInRange(min, max) {
-                return Math.random() * (max - min) + min;
-            }
-
-            var interval = setInterval(function() {
-                var timeLeft = animationEnd - Date.now();
-
-                if (timeLeft <= 0) {
-                    return clearInterval(interval);
-                }
-
-                var particleCount = 50 * (timeLeft / duration);
-                // রঙিন কাগজ ছিটানোর বিভিন্ন পজিশন
-                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
-                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
-            }, 250);
-
-            // ৫.৫ সেকেন্ড পর সাপোর্ট পেজে অটোমেটিক নিয়ে যাবে
-            setTimeout(() => {
-                window.location.href = "support.html";
-            }, 5500);
+        function order() {
+            if(!document.getElementById('bn').value || !document.getElementById('pn').value) return alert("তথ্য দিন!");
+            document.getElementById('o-box').style.display='none';
+            document.getElementById('success').style.display='flex';
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+            setTimeout(() => window.location.href="support.html", 4000);
         }
     </script>
 </body>
