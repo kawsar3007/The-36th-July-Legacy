@@ -11,15 +11,19 @@
             --b-card: #1E2329;
             --b-yellow: #FCD535;
             --b-text: #EAECEF;
-            --b-gray: #848E9C;
         }
 
         body {
-            background-color: var(--binance-bg);
-            color: var(--binance-text);
+            background-color: var(--b-bg);
+            color: var(--b-text);
             font-family: 'Segoe UI', Roboto, sans-serif;
             margin: 0;
             overflow-x: hidden;
+        }
+
+        /* গ্লোয়িং টেক্সট ইফেক্ট */
+        .glow-text {
+            text-shadow: 0 0 10px rgba(252, 213, 53, 0.3);
         }
 
         /* টপ বার */
@@ -47,43 +51,59 @@
             align-items: center;
             gap: 8px;
             transition: 0.3s;
+            box-shadow: 0 0 10px rgba(252, 213, 53, 0.4);
         }
 
         .community-btn:hover {
-            box-shadow: 0 0 20px var(--b-yellow);
+            box-shadow: 0 0 25px var(--b-yellow);
             transform: scale(1.05);
         }
 
-        .maintenance-tag {
-            color: var(--b-yellow);
-            font-size: 13px;
-            font-weight: 600;
-            border: 1px solid rgba(252, 213, 53, 0.3);
-            padding: 8px 15px;
-            border-radius: 4px;
+        /* সার্চবার সেকশন */
+        .search-container {
+            display: flex;
+            justify-content: center;
+            padding: 30px;
+            background: var(--b-bg);
+        }
+
+        .search-box {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 15px 25px;
+            border-radius: 50px;
+            border: 1px solid #444;
+            background: var(--b-card);
+            color: #fff;
+            outline: none;
+            font-size: 16px;
+            transition: 0.3s;
+            box-shadow: 0 0 5px rgba(252, 213, 53, 0.1);
+        }
+
+        .search-box input:focus {
+            border-color: var(--b-yellow);
+            box-shadow: 0 0 20px rgba(252, 213, 53, 0.3);
         }
 
         /* হিরো */
         .hero {
             text-align: center;
-            padding: 80px 20px;
-            background: radial-gradient(circle at center, #1e2329 0%, #0b0e11 100%);
+            padding: 60px 20px;
         }
 
         .hero h1 {
-            font-size: 60px;
+            font-size: 55px;
             color: var(--b-yellow);
             margin: 0;
             text-transform: uppercase;
             letter-spacing: 2px;
-        }
-
-        .hero p {
-            color: var(--b-gray);
-            max-width: 650px;
-            margin: 15px auto;
-            font-size: 18px;
-            line-height: 1.6;
+            text-shadow: 0 0 20px rgba(252, 213, 53, 0.5); /* মেইন টাইটেল গ্লো */
         }
 
         /* জেলা গ্রিড */
@@ -91,7 +111,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
             gap: 25px;
-            padding: 40px 8%;
+            padding: 20px 8% 60px;
         }
 
         .card {
@@ -101,14 +121,14 @@
             text-align: center;
             cursor: pointer;
             border: 1px solid #333;
-            transition: all 0.4s ease; /* স্মুথ ট্রানজিশন */
+            transition: all 0.4s ease;
         }
 
-        /* মাউসের পয়েন্টার জেলার নামের উপরে নিলে যা হবে */
+        /* মাউসের পয়েন্টার নিলে ইফেক্ট */
         .card:hover {
-            background-color: var(--b-yellow) !important; /* কালো জায়গা হলুদ হবে */
+            background-color: var(--b-yellow) !important;
             transform: translateY(-10px);
-            box-shadow: 0 0 30px rgba(252, 213, 53, 0.6); /* হলুদ উজ্জ্বল ইফেক্ট */
+            box-shadow: 0 0 35px var(--b-yellow); /* বক্স গ্লো */
         }
 
         .card h3 {
@@ -116,67 +136,29 @@
             font-size: 24px;
             color: #fff;
             transition: 0.3s;
-            text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(252, 213, 53, 0.2); /* নাম গ্লো */
         }
 
-        /* হোভার করলে টেক্সট জ্বলজ্বল করবে এবং কালো হয়ে যাবে */
         .card:hover h3 {
             color: #000;
             font-weight: 900;
-            text-shadow: 0 0 5px rgba(0,0,0,0.2);
+            text-shadow: none;
         }
 
-        .card span {
-            display: block;
-            margin-top: 10px;
-            color: var(--b-yellow);
-            font-size: 12px;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-
-        .card:hover span {
-            color: rgba(0,0,0,0.7);
-        }
-
-        /* ফুটার */
+        /* ফুটার ও সাপোর্ট */
         .footer {
             text-align: center;
-            padding: 80px 20px;
+            padding: 60px 20px;
             background: #000;
             border-top: 1px solid #222;
         }
 
-        .warning-text {
-            color: #FF0000;
-            font-weight: bold;
-            font-size: 18px;
-            margin-bottom: 15px;
-            line-height: 1.5;
-        }
-
-        .copy-info {
-            color: #444;
-            font-size: 14px;
-            letter-spacing: 1px;
-        }
-
-        /* কাস্টমার সাপোর্ট হোয়াটসঅ্যাপ (নম্বর আপডেট করা হয়েছে) */
         .wa-float {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: #2ebd85;
-            color: white;
-            padding: 15px 25px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            z-index: 2000;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+            position: fixed; bottom: 30px; right: 30px; background: #2ebd85;
+            color: white; padding: 15px 25px; border-radius: 50px;
+            text-decoration: none; font-weight: bold; display: flex;
+            align-items: center; gap: 10px; z-index: 2000;
+            box-shadow: 0 0 15px rgba(46, 189, 133, 0.4);
         }
     </style>
 </head>
@@ -188,29 +170,33 @@
 
 <div class="top-nav">
     <a href="#" class="community-btn">
-        <i class="fab fa-facebook-square"></i> JOIN COMMUNITY
+        <i class="fab fa-facebook-square" style="font-size: 18px;"></i> JOIN COMMUNITY
     </a>
-    <div class="maintenance-tag">
-        <i class="fas fa-tools"></i> MAINTENANCE FEE: NOMINAL COST
+    <div style="color: var(--b-yellow); font-weight: bold; font-size: 13px; text-shadow: 0 0 10px rgba(252, 213, 53, 0.4);">
+        MAINTENANCE FEE: NOMINAL COST
     </div>
 </div>
 
 <div class="hero">
-    <h1>THE DISTRICT LEGACY</h1>
-    <p>The first and largest digital monument of Bangladesh. Secure your place in history through your district map.</p>
+    <h1 class="glow-text">THE DISTRICT LEGACY</h1>
+    <p style="color: #848e9c; font-size: 18px;">Preserve your pride in Bangladesh's digital history.</p>
 </div>
 
-<div class="grid" id="district-list">
+<div class="search-container">
+    <div class="search-box">
+        <input type="text" id="distSearch" placeholder="Type your district name to search..." onkeyup="filterDistricts()">
+    </div>
+</div>
+
+<div class="grid" id="district-grid">
     </div>
 
 <div class="footer">
-    <div class="warning-text">
+    <p style="color: #FF0000; font-weight: bold; font-size: 18px; text-shadow: 0 0 10px rgba(255,0,0,0.2);">
         ⚠️ LIMITED EDITION: 10,000 PLOTS FOR EACH DISTRICT ONLY.<br>
         NUMBERS WILL NEVER BE INCREASED.
-    </div>
-    <div class="copy-info">
-        THE DISTRICT LEGACY © 2026 KAWSAR AHMED
-    </div>
+    </p>
+    <p style="color: #444; font-size: 14px; margin-top: 20px;">THE DISTRICT LEGACY © 2026 KAWSAR AHMED</p>
 </div>
 
 <script>
@@ -225,14 +211,23 @@
         "Jamalpur", "Mymensingh", "Netrokona", "Sherpur"
     ];
 
-    const list = document.getElementById('district-list');
-    districts.forEach(d => {
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.onclick = () => location.href = `${d.toLowerCase()}.html`;
-        card.innerHTML = `<h3>${d.toUpperCase()}</h3><span>10,000 LIMITED PLOTS</span>`;
-        list.appendChild(card);
+    const grid = document.getElementById('district-grid');
+    districts.sort().forEach(d => {
+        const div = document.createElement('div');
+        div.className = 'card';
+        div.setAttribute('data-name', d.toLowerCase());
+        div.onclick = () => location.href = d.toLowerCase() + '.html';
+        div.innerHTML = `<h3>${d.toUpperCase()}</h3><span style="color: var(--b-yellow); font-size: 12px; font-weight: bold; display: block; margin-top: 10px;">10,000 PLOTS</span>`;
+        grid.appendChild(div);
     });
+
+    function filterDistricts() {
+        let input = document.getElementById('distSearch').value.toLowerCase();
+        let cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+            card.style.display = card.dataset.name.includes(input) ? 'block' : 'none';
+        });
+    }
 </script>
 
 </body>
