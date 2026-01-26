@@ -1,28 +1,42 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>SUPPORT DASHBOARD</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body { background: #0B0E11; color: #fff; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .card { background: #1E2329; border: 2px solid #FCD535; padding: 35px; border-radius: 20px; width: 400px; text-align: center; }
-        .info-box { background: #0b0e11; padding: 15px; border-radius: 12px; text-align: left; margin: 20px 0; border-left: 5px solid #FCD535; }
-        .info-box p { font-size: 14px; margin: 10px 0; color: #ccc; }
-        .btn-wa { background: #2ebd85; color: #fff; padding: 16px; border-radius: 12px; text-decoration: none; display: block; font-weight: bold; font-size: 16px; }
+        .support-card { background: #1E2329; border: 2px solid #FCD535; padding: 40px; border-radius: 25px; width: 400px; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.6); }
+        .header-icon { font-size: 55px; color: #FCD535; margin-bottom: 20px; }
+        .info-list { background: #0b0e11; padding: 20px; border-radius: 15px; text-align: left; margin: 25px 0; border-left: 6px solid #FCD535; }
+        .info-list p { font-size: 14px; margin: 12px 0; color: #EAECEF; line-height: 1.5; }
+        .info-list b { color: #FCD535; }
+        .btn-wa { background: #2ebd85; color: #fff; padding: 18px; border-radius: 12px; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: bold; font-size: 18px; transition: 0.3s; }
+        .btn-wa:hover { background: #25a171; transform: translateY(-3px); }
+        .back-btn { display: block; margin-top: 25px; color: #848e9c; text-decoration: none; font-size: 13px; }
     </style>
 </head>
 <body>
-    <div class="card">
-        <i class="fas fa-headset" style="font-size: 50px; color: #FCD535;"></i>
-        <h2>CONTACT SUPPORT</h2>
-        <div class="info-box">
-            <p><strong>1. Payment:</strong> Screenshot of ৳36 transaction.</p>
-            <p><strong>2. Details:</strong> Your Brand Name & Plot ID.</p>
-            <p><strong>3. Logo:</strong> Your Square Branding Image.</p>
-            <p><strong>4. Link:</strong> Your Social or Website URL.</p>
+
+    <div class="support-card">
+        <div class="header-icon"><i class="fas fa-headset"></i></div>
+        <h2 style="margin: 0; font-size: 24px;">CREATOR SUPPORT</h2>
+        
+        <div class="info-list">
+            <p><b>1. Payment Proof:</b> Screenshot of ৳36 transaction.</p>
+            <p><b>2. Order Details:</b> Your Brand Name & Plot ID.</p>
+            <p><b>3. Identity:</b> Your Square Brand Logo Image.</p>
+            <p><b>4. Official Link:</b> Your Website or Social link.</p>
         </div>
-        <a href="https://wa.me/8801756206213" target="_blank" class="btn-wa">CHAT ON WHATSAPP</a>
-        <a href="javascript:history.back()" style="display:block; margin-top:20px; color:#848e9c; text-decoration:none; font-size:13px;">← BACK TO MAP</a>
+
+        <a href="https://wa.me/8801756206213" target="_blank" class="btn-wa">
+            <i class="fab fa-whatsapp" style="font-size: 24px;"></i> CHAT ON WHATSAPP
+        </a>
+
+        <a href="javascript:history.back()" class="back-btn">
+            <i class="fas fa-arrow-left"></i> BACK TO DISTRICT MAP
+        </a>
     </div>
+
 </body>
 </html>
