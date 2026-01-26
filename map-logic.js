@@ -1,18 +1,17 @@
-// ১. কনফিগারেশন সেটআপ
+// ১. কনফিগারেশন (২৪০০ প্লট, ১৫টি কলাম যাতে স্ক্রিন জুড়ে থাকে)
 const totalPlots = 2400;
-const cols = 10;      // ১০টি কলাম (ফিক্সড লম্বা ম্যাপ)
-const bS = 50;        // প্রতিটি ব্লকের সাইজ ৫০x৫০
+const cols = 15;      
+const bS = 60;        // ব্লক সাইজ ৬০ পিক্সেল (যাতে আঙ্গুলে ছোঁয়া সহজ হয়)
 const canvas = document.getElementById('mapCanvas');
 const ctx = canvas.getContext('2d');
 const marker = document.getElementById('plotMarker');
 const wrapper = document.getElementById('cWrapper');
 
-// ক্যানভাস সাইজ ক্যালকুলেশন
+// ক্যানভাস সাইজ নির্ধারণ (১৫ * ৬০ = ৯০০px চওড়া যা অটো-ফিট হবে)
 canvas.width = cols * bS; 
-const totalRows = Math.ceil(totalPlots / cols);
+const totalRows = Math.ceil(totalPlots / cols); 
 canvas.height = totalRows * bS; 
 
-// সোল্ড প্লট ডাটাবেজ
 const soldPlots = {}; 
 
 // ২. ম্যাপ ড্রয়িং ফাংশন
@@ -20,8 +19,6 @@ function drawMap() {
     ctx.fillStyle = "#ffffff";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     
-    let soldCount = 0;
-
     for (let i = 1; i <= totalPlots; i++) {
         const r = Math.floor((i - 1) / cols);
         const c = (i - 1) % cols;
@@ -29,78 +26,64 @@ function drawMap() {
         const y = r * bS;
 
         if (soldPlots[i]) {
-            // যদি ছবি থাকে তবে ড্র হবে
             const img = new Image();
-            img.crossOrigin = "anonymous"; // সিকিউরিটি চেক সাকসেস করার জন্য
             img.src = soldPlots[i].logo;
-            img.onload = () => ctx.drawImage(img, x, y, bS, bS);
-            soldCount++;
+            ctx.drawImage(img, x, y, bS, bS);
         } else {
-            // গ্রিড ড্রয়িং
-            ctx.strokeStyle = "#eeeeee";
-            ctx.lineWidth = 1;
+            ctx.strokeStyle = "#dddddd";
             ctx.strokeRect(x, y, bS, bS);
             
-            // আইডি নম্বর
-            ctx.fillStyle = "#bbbbbb";
-            ctx.font = "14px Arial";
+            ctx.fillStyle = "#999999";
+            ctx.font = "16px Arial"; 
             ctx.textAlign = "center";
-            ctx.fillText(i, x + bS/2, y + bS/2 + 5);
+            ctx.fillText(i, x + bS/2, y + bS/2 + 6);
         }
     }
-
-    // কাউন্টার আপডেট
-    if(document.getElementById('soldCount')) document.getElementById('soldCount').innerText = soldCount;
-    if(document.getElementById('availCount')) document.getElementById('availCount').innerText = totalPlots - soldCount;
+    updateCounts();
 }
 
-// ৩. সার্চ এবং হাইলাইট (নিখুঁত ক্যালকুলেশন)
+function updateCounts() {
+    let sold = Object.keys(soldPlots).length;
+    if(document.getElementById('soldCount')) document.getElementById('soldCount').innerText = sold;
+    if(document.getElementById('availCount')) document.getElementById('availCount').innerText = totalPlots - sold;
+}
+
+// ৩. সার্চ এবং হাইলাইট লজিক
 window.findAndMarkPlot = function(id) {
     const plotID = parseInt(id);
     if (isNaN(plotID) || plotID < 1 || plotID > totalPlots) {
-        alert("Enter ID 1-2400");
-        return;
+        alert("Enter ID 1-2400"); return;
     }
 
     const r = Math.floor((plotID - 1) / cols);
     const c = (plotID - 1) % cols;
-    
-    // ক্যানভাস সাইজ অনুযায়ী পজিশন
-    const x = c * bS;
     const y = r * bS;
 
     if (marker) {
         marker.style.display = 'block';
-        // ১০ কলামের রেসপন্সিভ প্রস্থ সেট করা
         marker.style.width = (100 / cols) + "%";
         marker.style.height = marker.offsetWidth + "px";
         marker.style.left = (c * (100 / cols)) + "%";
         marker.style.top = (y / canvas.height * 100) + "%";
     }
 
-    // স্ক্রল ফোকাস
-    const containerTop = wrapper.getBoundingClientRect().top + window.pageYOffset;
-    const plotTopRelative = (y / canvas.height) * wrapper.offsetHeight;
-    const targetScroll = containerTop + plotTopRelative - (window.innerHeight / 2);
-
+    // অটো স্ক্রল (প্লটটিকে স্ক্রিনের মাঝখানে আনবে)
+    const containerTop = wrapper.offsetTop;
+    const scrollPos = (y / canvas.height) * wrapper.scrollHeight;
+    
     window.scrollTo({
-        top: targetScroll,
+        top: containerTop + scrollPos - (window.innerHeight / 3),
         behavior: 'smooth'
     });
 };
 
-// ৪. ম্যাপ ডাউনলোড (Security Check Bypass)
+// ম্যাপ ডাউনলোড ফাংশন
 window.downloadMap = function() {
-    try {
-        const link = document.createElement('a');
-        link.download = 'District_Map.png';
-        link.href = canvas.toDataURL("image/png");
-        link.click();
-    } catch (err) {
-        alert("Security check failed! Please try using a different browser or host your files on a server.");
-        console.error("Canvas error:", err);
-    }
+    const imageURL = canvas.toDataURL("image/png");
+    const link = document.createElement('a');
+    link.href = imageURL;
+    link.download = "District_Map.png";
+    link.click();
 };
 
-// ম্যাপ রান করা
 window.onload = drawMap;
