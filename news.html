@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OFFICIAL ANNOUNCEMENTS | DIGITAL FRIDAY</title>
+    <title>NEWS & POLICIES | DIGITAL FRIDAY</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { 
@@ -17,58 +17,15 @@
         body { 
             background-color: var(--b-bg); 
             color: var(--b-text); 
-            font-family: 'Segoe UI', sans-serif; 
+            font-family: 'Segoe UI', Roboto, sans-serif; 
             margin: 0; 
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 40px 20px;
+            padding: 50px 20px;
         }
 
-        .container { width: 100%; max-width: 850px; }
-
-        .header { text-align: center; margin-bottom: 40px; }
-        .header h1 { 
-            color: var(--b-yellow); 
-            text-transform: uppercase; 
-            letter-spacing: 3px; 
-            font-size: clamp(24px, 5vw, 35px);
-            text-shadow: 0 0 20px rgba(252, 213, 53, 0.2);
-        }
-
-        /* ওয়ার্নিং কার্ড - লিমিটেড এডিশন */
-        .legacy-box {
-            background: linear-gradient(45deg, #1E2329, #000);
-            border: 2px solid var(--b-yellow);
-            padding: 30px;
-            border-radius: 20px;
-            text-align: center;
-            margin-bottom: 40px;
-            box-shadow: 0 0 30px rgba(252, 213, 53, 0.1);
-        }
-        .legacy-box h2 { color: var(--b-yellow); margin: 0; font-size: 22px; letter-spacing: 2px; }
-        .legacy-box p { font-size: 16px; margin: 15px 0; color: #fff; font-weight: bold; }
-        .copyright { font-size: 12px; color: #848e9c; margin-top: 20px; text-transform: uppercase; }
-
-        /* গাইডলাইন কার্ড */
-        .policy-card {
-            background: var(--b-card);
-            border-left: 6px solid var(--b-red);
-            padding: 25px;
-            border-radius: 12px;
-            margin-bottom: 25px;
-        }
-        .policy-card h3 { color: var(--b-red); margin-top: 0; display: flex; align-items: center; gap: 10px; }
-
-        /* রিনিউয়াল কার্ড */
-        .info-card {
-            background: var(--b-card);
-            border-left: 6px solid #2ebd85;
-            padding: 25px;
-            border-radius: 12px;
-            margin-bottom: 25px;
-        }
-        .info-card h3 { color: #2ebd85; margin-top: 0; display: flex; align-items: center; gap: 10px; }
+        .container { width: 100%; max-width: 800px; }
 
         .back-btn {
             display: inline-flex;
@@ -77,45 +34,80 @@
             color: #848e9c;
             text-decoration: none;
             margin-bottom: 30px;
-            font-size: 14px;
             font-weight: bold;
+            transition: 0.3s;
         }
         .back-btn:hover { color: var(--b-yellow); }
+
+        /* Legacy Box */
+        .legacy-box {
+            background: linear-gradient(145deg, #1E2329, #0B0E11);
+            border: 2px solid var(--b-yellow);
+            padding: 40px 20px;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 40px;
+            box-shadow: 0 0 40px rgba(252, 213, 53, 0.1);
+        }
+        .legacy-box h2 { color: var(--b-yellow); margin: 0; font-size: 24px; letter-spacing: 3px; }
+        .legacy-box p { font-size: 18px; margin: 20px 0; color: #fff; font-weight: bold; line-height: 1.5; }
+        .copyright { font-size: 12px; color: #848e9c; margin-top: 25px; letter-spacing: 2px; }
+
+        /* Card Styles */
+        .info-card {
+            background: var(--b-card);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border-left: 6px solid #444;
+            transition: 0.3s;
+        }
+        .info-card:hover { transform: translateY(-5px); }
+        .red-border { border-left-color: var(--b-red); }
+        .green-border { border-left-color: #2ebd85; }
+
+        .info-card h3 { margin-top: 0; display: flex; align-items: center; gap: 12px; font-size: 20px; text-transform: uppercase; }
+        .info-card p, .info-card li { font-size: 15px; color: #b3b3b3; line-height: 1.8; }
+        b { color: var(--b-yellow); }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> BACK TO GLOBAL MAP</a>
-
-        <div class="header">
-            <h1><i class="fas fa-bullhorn"></i> Official Notice Board</h1>
-        </div>
+        <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> BACK TO HOMEPAGE</a>
 
         <div class="legacy-box">
-            <h2>⚠️ LIMITED EDITION NOTICE</h2>
-            <p>EACH DISTRICT CONTAINS A FIXED NUMBER OF PLOTS ONLY.<br>THIS NUMBER WILL NEVER BE INCREASED IN THE FUTURE.</p>
-            <div style="height: 1px; background: #444; margin: 20px auto; width: 50%;"></div>
-            <div class="copyright">THE DISTRICT LEGACY © 2026 KAWSAR AHMED</div>
+            <h2><i class="fas fa-crown"></i> THE DISTRICT LEGACY</h2>
+            <p>⚠️ LIMITED EDITION NOTICE:<br>PLOTS FOR EACH DISTRICT ARE STRICTLY FIXED.<br>THE NUMBER OF PLOTS WILL NEVER BE INCREASED.</p>
+            <div class="copyright">GLOBAL ADVERTISING DIRECTORY © 2026 KAWSAR AHMED</div>
         </div>
 
-        <div class="policy-card">
-            <h3><i class="fas fa-ban"></i> STRICTLY PROHIBITED</h3>
-            <p style="line-height: 1.6;">To maintain the integrity of Digital Friday, we strictly prohibit any links or logos related to:</p>
-            <ul style="color: #EAECEF; font-size: 15px;">
-                <li>Adult or Obscene Content</li>
-                <li>Gambling, Betting or Casinos</li>
-                <li>Illegal or Fraudulent Activities</li>
+        <div class="info-card red-border">
+            <h3 style="color: var(--b-red);"><i class="fas fa-shield-alt"></i> Strictly Prohibited</h3>
+            <p>To ensure a safe environment, we have a zero-tolerance policy. The following content is <b>STRICTLY BANNED</b>:</p>
+            <ul>
+                <li>Adult, Obscene, or Vulgar imagery/links.</li>
+                <li>Gambling, Betting, Casinos, or related platforms.</li>
+                <li>Fraudulent, Illegal, or Deceptive services.</li>
             </ul>
-            <p style="color: var(--b-red); font-size: 13px; font-weight: bold;">Violation will result in immediate plot removal without a refund.</p>
+            <p style="color: var(--b-red); font-size: 13px;">*Violation will result in plot termination without any prior notice or refund.</p>
+        </div>
+
+        <div class="info-card green-border">
+            <h3 style="color: #2ebd85;"><i class="fas fa-calendar-check"></i> Validity & Renewal</h3>
+            <p>Your legacy starts here. All plots purchased in <b>2026</b> will remain active and live on our homepage for the entire duration of <b>2026 and 2027</b>.</p>
+            <p>To maintain your spot in the global directory, a <b>Re-activation / Renewal</b> will be required in <b>January 2028</b>.</p>
         </div>
 
         <div class="info-card">
-            <h3><i class="fas fa-history"></i> VALIDITY & RENEWAL</h3>
-            <p style="line-height: 1.6;">Every plot purchased in 2026 will remain active and live on our homepage until the end of 2027 at no extra cost.</p>
-            <p style="color: var(--b-yellow); font-weight: bold;">Re-activation / Renewal will be required in January 2028 to keep the legacy alive.</p>
+            <h3 style="color: var(--b-yellow);"><i class="fas fa-image"></i> Plot Submission Guide</h3>
+            <p>For the best visual quality on the district map, please follow these requirements:</p>
+            <ul>
+                <li>Logo Format: <b>Square (1:1 Ratio)</b></li>
+                <li>Recommended Size: <b>500 x 500 Pixels</b></li>
+                <li>File Type: <b>High-Quality PNG or JPG</b></li>
+            </ul>
         </div>
-
     </div>
 
 </body>
