@@ -9,31 +9,33 @@
         :root { --b-bg: #0B0E11; --b-card: #1E2329; --b-yellow: #FCD535; --wa-green: #25D366; }
         body { background: var(--b-bg); color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; text-align: center; overflow-x: hidden; }
         
-        .header { background: #000; color: var(--b-yellow); padding: 15px; font-size: 20px; font-weight: 900; letter-spacing: 2px; }
+        /* Header & Status Bar */
+        .header { background: #000; color: var(--b-yellow); padding: 15px; font-size: 20px; font-weight: 900; text-transform: uppercase; }
         .status-bar { background: #161a1e; padding: 12px; display: flex; justify-content: space-around; font-size: 13px; font-weight: bold; border-bottom: 2px solid #333; }
         
+        /* Navigation */
         .top-nav { position: sticky; top: 0; background: var(--b-card); padding: 10px 2%; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--b-yellow); z-index: 1000; }
-        
-        .search-box { display: flex; background: #0b0e11; border: 1px solid #444; border-radius: 5px; }
+        .search-box { display: flex; background: #0b0e11; border: 1px solid #444; border-radius: 5px; overflow: hidden; }
         .search-box input { background: transparent; border: none; padding: 8px; color: #fff; width: 60px; outline: none; }
         .search-box button { background: var(--b-yellow); border: none; padding: 0 12px; cursor: pointer; color: #000; }
 
-        .nav-btn { display: flex; align-items: center; gap: 8px; background: #161a1e; padding: 8px 12px; border-radius: 50px; border: 1px solid #333; text-decoration: none; color: #fff; font-size: 11px; font-weight: bold; }
+        .nav-btn { display: flex; align-items: center; gap: 6px; background: #161a1e; padding: 8px 12px; border-radius: 50px; border: 1px solid #333; text-decoration: none; color: #fff; font-size: 11px; font-weight: bold; }
         .gold-icon { width: 28px; height: 28px; background: var(--b-yellow); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #000; }
 
-        .buy-btn-large { background: var(--b-yellow); color: #000; padding: 8px 15px; font-size: 15px; border-radius: 8px; text-decoration: none; font-weight: 900; animation: pulse 1.5s infinite; }
+        .buy-btn { background: var(--b-yellow); color: #000; padding: 8px 15px; font-size: 14px; border-radius: 8px; text-decoration: none; font-weight: 900; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(252, 213, 53, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(252, 213, 53, 0); } 100% { box-shadow: 0 0 0 0 rgba(252, 213, 53, 0); } }
 
-        /* ক্যানভাস লেআউট: ডানে-বামে সরবে না, ডিসপ্লে জুড়ে থাকবে */
+        /* Canvas Style - ফুল ডিসপ্লে লেআউট */
         .canvas-container { 
-            width: 94%;           /* দুই পাশে হাফ আঙ্গুল জায়গা ফাঁকা */
-            max-width: 600px; 
-            margin: 15px auto; 
+            width: 95%;           /* স্ক্রিনের ৯৫% জায়গা নিবে */
+            max-width: 500px;     /* মোবাইল ফ্রেন্ডলি ফিক্সড চওড়া (১০ কলাম * ৫০px) */
+            margin: 20px auto; 
             background: #fff; 
             position: relative; 
-            border: 3px solid #333; 
+            border: 3px solid #444; 
             border-radius: 10px;
             overflow: hidden; 
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
         }
         canvas { width: 100% !important; height: auto !important; display: block; image-rendering: pixelated; }
         
@@ -45,23 +47,25 @@
             pointer-events: none; 
             z-index: 5; 
             background: rgba(255, 0, 0, 0.2);
+            box-sizing: border-box;
         }
 
-        .support-float { position: fixed; bottom: 20px; right: 20px; width: 55px; height: 55px; background: var(--wa-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 15px rgba(0,0,0,0.5); z-index: 2000; border: 2px solid #fff; }
+        /* Floating WhatsApp Button */
+        .support-float { position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; background: var(--wa-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 20px rgba(0,0,0,0.5); z-index: 2000; border: 2px solid #fff; text-decoration: none; }
     </style>
 </head>
 <body>
 
-<div class="header">DHAKA DISTRICT</div> 
+<div class="header">DISTRICT MAP</div> 
 
 <div class="status-bar">
     <div>TOTAL: 2400</div>
     <div style="color: var(--b-yellow);">SOLD: <span id="soldCount">0</span></div>
-    <div style="color: #2ebd85;">AVAILABLE: <span id="availCount">2400</span></div>
+    <div style="color: #2ebd85;">AVAIL: <span id="availCount">2400</span></div>
 </div>
 
 <div class="top-nav">
-    <div style="flex:1; display:flex; justify-content:flex-start;">
+    <div style="flex:1;">
         <div class="search-box">
             <input type="number" id="plotInput" placeholder="ID">
             <button onclick="locatePlot()"><i class="fas fa-search"></i></button>
@@ -79,11 +83,8 @@
         </div>
     </div>
 
-    <div style="flex:1; display:flex; justify-content:flex-end; gap:5px;">
-        <button onclick="downloadMap()" class="nav-btn" style="background: #fff; color: #000; padding: 8px 10px;">
-            <i class="fas fa-download"></i>
-        </button>
-        <a href="order.html" class="buy-btn-large">BUY</a>
+    <div style="flex:1; display:flex; justify-content:flex-end;">
+        <a href="order.html" class="buy-btn">BUY</a>
     </div>
 </div>
 
@@ -92,21 +93,77 @@
     <canvas id="mapCanvas"></canvas>
 </div>
 
-<a href="support.html" class="support-float"><i class="fab fa-whatsapp" style="color:#fff; font-size:28px;"></i></a>
-
-<script src="map-logic.js"></script>
+<a href="https://wa.me/YOUR_NUMBER" class="support-float">
+    <i class="fab fa-whatsapp" style="color:#fff; font-size:30px;"></i>
+</a>
 
 <script>
-    function locatePlot() {
-        const id = document.getElementById('plotInput').value;
-        if(id < 1 || id > 2400) {
-            alert("Enter ID 1-2400");
-            return;
-        }
-        if (typeof window.findAndMarkPlot === "function") {
-            window.findAndMarkPlot(id);
+    // --- ম্যাপ কনফিগারেশন ---
+    const totalPlots = 2400;
+    const cols = 10;      // ১০টি কলাম (স্ক্রিনে ফিট করার জন্য)
+    const bS = 50;        // আপনি যেমন চেয়েছিলেন ৫০x৫০ পিক্সেল
+    const canvas = document.getElementById('mapCanvas');
+    const ctx = canvas.getContext('2d');
+    const marker = document.getElementById('plotMarker');
+    const wrapper = document.getElementById('cWrapper');
+
+    canvas.width = cols * bS; // ৫০০ পিক্সেল চওড়া
+    canvas.height = Math.ceil(totalPlots / cols) * bS; // ১২,০০০ পিক্সেল লম্বা
+
+    const soldPlots = {}; // সোল্ড ডাটা এখানে বসবে
+
+    function drawMap() {
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        for (let i = 1; i <= totalPlots; i++) {
+            const r = Math.floor((i - 1) / cols);
+            const c = (i - 1) % cols;
+            const x = c * bS;
+            const y = r * bS;
+
+            if (soldPlots[i]) {
+                ctx.fillStyle = "#ff4d4d"; // সোল্ড হলে লাল
+                ctx.fillRect(x, y, bS, bS);
+            } else {
+                ctx.strokeStyle = "#dddddd";
+                ctx.strokeRect(x, y, bS, bS);
+                
+                ctx.fillStyle = "#888888";
+                ctx.font = "14px Arial"; 
+                ctx.textAlign = "center";
+                ctx.fillText(i, x + bS/2, y + bS/2 + 5);
+            }
         }
     }
+
+    function locatePlot() {
+        const id = document.getElementById('plotInput').value;
+        const plotID = parseInt(id);
+        if (isNaN(plotID) || plotID < 1 || plotID > totalPlots) {
+            alert("Enter ID 1-2400"); return;
+        }
+
+        const r = Math.floor((plotID - 1) / cols);
+        const c = (plotID - 1) % cols;
+        const yPos = r * bS;
+
+        // মার্কার সেটআপ
+        marker.style.display = 'block';
+        marker.style.width = (100 / cols) + "%";
+        marker.style.height = marker.offsetWidth + "px";
+        marker.style.left = (c * (100 / cols)) + "%";
+        marker.style.top = (yPos / canvas.height * 100) + "%";
+
+        // স্ক্রল করে ওই প্লটে নিয়ে যাওয়া
+        window.scrollTo({
+            top: wrapper.offsetTop + (yPos * (wrapper.offsetWidth / canvas.width)) - (window.innerHeight / 2),
+            behavior: 'smooth'
+        });
+    }
+
+    // পেজ লোড হলে ম্যাপ ড্র করা
+    window.onload = drawMap;
 </script>
 
 </body>
