@@ -11,6 +11,8 @@
         input:focus { border-color: #FCD535; }
         .btn { width: 100%; padding: 18px; background: #FCD535; color: #000; font-weight: bold; border: none; cursor: pointer; border-radius: 10px; font-size: 18px; margin-top: 15px; transition: 0.3s; }
         .btn:hover { background: #fff; transform: scale(1.02); }
+        .back-link { display: inline-block; margin-top: 15px; color: #848e9c; text-decoration: none; font-size: 14px; font-weight: bold; }
+        .back-link:hover { color: #FCD535; }
         #celeb-overlay { display: none; position: fixed; inset: 0; background: #FCD535; color: #000; flex-direction: column; justify-content: center; align-items: center; z-index: 100; text-align: center; }
     </style>
 </head>
@@ -21,13 +23,14 @@
     <input type="text" id="brandName" placeholder="Your Brand Name">
     <input type="number" id="plotID" placeholder="Plot ID (1-7000)">
     <button class="btn" onclick="handleOrder()">SUBMIT REQUEST</button>
+    <a href="javascript:history.back()" class="back-link">← BACK TO MAP</a>
 </div>
 
 <div id="celeb-overlay">
     <h1 id="congratsName" style="font-size: 40px; margin: 0; line-height: 1.2;">CONGRATULATIONS!</h1>
-    <p style="font-size: 20px; font-weight: bold; margin-top: 15px;">আপনার অনুরোধ গ্রহণ করা হয়েছে।</p>
+    <p style="font-size: 20px; font-weight: bold; margin-top: 15px;">Your request has been successfully received.</p>
     <p style="font-size: 16px;">Redirecting back to map in 5s...</p>
-    <p style="background: #000; color: #fff; padding: 12px 25px; border-radius: 50px; margin-top: 25px; font-weight: bold; font-size: 14px;">দ্রুত সাপোর্ট টিমের সাথে যোগাযোগ করুন!</p>
+    <p style="background: #000; color: #fff; padding: 12px 25px; border-radius: 50px; margin-top: 25px; font-weight: bold; font-size: 14px;">Contact Support Team Immediately!</p>
 </div>
 
 <script>
@@ -36,35 +39,33 @@
         const id = document.getElementById('plotID').value;
 
         if(!name || !id || id < 1 || id > 7000) {
-            alert("সঠিক তথ্য এবং ১-৭০০০ এর মধ্যে আইডি দিন।");
+            alert("Please provide correct info and ID between 1-7000.");
             return;
         }
 
-        // ফর্ম লুকানো এবং সাকসেস মেসেজ দেখানো
         document.getElementById('formBox').style.display = 'none';
         document.getElementById('celeb-overlay').style.display = 'flex';
         document.getElementById('congratsName').innerText = "CONGRATS, " + name.toUpperCase() + "!";
 
-        // দুই সাইড থেকে ঘন কনফেটি এনিমেশন
         var duration = 5 * 1000;
         var end = Date.now() + duration;
 
         (function frame() {
-            // বাম সাইড থেকে
+            // বাম সাইড থেকে রঙিন কনফেটি
             confetti({
-                particleCount: 15,
+                particleCount: 20,
                 angle: 60,
-                spread: 70,
+                spread: 80,
                 origin: { x: 0, y: 0.6 },
-                colors: ['#000', '#FCD535', '#ffffff']
+                colors: ['#ff0000', '#00ff00', '#0000ff', '#FCD535', '#ffffff', '#ff00ff']
             });
-            // ডান সাইড থেকে
+            // ডান সাইড থেকে রঙিন কনফেটি
             confetti({
-                particleCount: 15,
+                particleCount: 20,
                 angle: 120,
-                spread: 70,
+                spread: 80,
                 origin: { x: 1, y: 0.6 },
-                colors: ['#000', '#FCD535', '#ffffff']
+                colors: ['#ff0000', '#00ff00', '#0000ff', '#FCD535', '#ffffff', '#ff00ff']
             });
 
             if (Date.now() < end) {
@@ -72,9 +73,8 @@
             }
         }());
 
-        // ৫ সেকেন্ড পর রিডাইরেক্ট
         setTimeout(() => {
-            window.location.href = "dhaka.html";
+            history.back(); // ৫ সেকেন্ড পর আগের ম্যাপ পেজে ফিরে যাবে
         }, 5000);
     }
 </script>
