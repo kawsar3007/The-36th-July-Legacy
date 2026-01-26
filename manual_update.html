@@ -1,100 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>MASTER ADMIN | ALL DISTRICTS</title>
+    <title>MASTER ADMIN PANEL</title>
     <style>
         body { background: #0B0E11; color: #fff; font-family: sans-serif; padding: 20px; display: none; }
-        .admin-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
-        .card { background: #1E2329; padding: 30px; border-radius: 15px; border: 1px solid #FCD535; }
-        select, input { width: 100%; padding: 12px; margin: 10px 0; background: #0B0E11; border: 1px solid #444; color: #fff; border-radius: 8px; box-sizing: border-box; }
-        select { border-color: #FCD535; font-weight: bold; cursor: pointer; }
-        .btn { width: 100%; padding: 15px; background: #FCD535; color: #000; font-weight: bold; border: none; cursor: pointer; border-radius: 8px; margin-top: 10px; }
-        .record-list { height: 500px; overflow-y: auto; background: #000; padding: 10px; border-radius: 8px; }
-        .item { padding: 10px; border-bottom: 1px solid #333; display: flex; justify-content: space-between; align-items: center; }
-        .del-btn { background: #ff4444; color: #fff; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
+        .grid { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .card { background: #1E2329; padding: 25px; border-radius: 15px; border: 1px solid #FCD535; }
+        select, input { width: 100%; padding: 12px; margin: 10px 0; background: #0b0e11; border: 1px solid #444; color: #fff; border-radius: 8px; }
+        .btn { width: 100%; padding: 15px; background: #FCD535; color: #000; font-weight: bold; border: none; cursor: pointer; border-radius: 8px; }
+        .list { height: 400px; overflow-y: auto; background: #000; padding: 10px; border-radius: 8px; }
     </style>
 </head>
 <body>
     <script>
-        if(prompt("Admin Password:") === "zoomlink34@gmail.com") { document.body.style.display = "block"; } 
-        else { window.location.href = "index.html"; }
+        if(prompt("Admin Password:") === "zoomlink34@gmail.com") { document.body.style.display = "block"; }
+        else { window.location.href="index.html"; }
     </script>
-
-    <div class="admin-grid">
+    <div class="grid">
         <div class="card">
-            <h2 style="color:#FCD535; margin-top:0;">UPDATE DISTRICT DATA</h2>
-            
-            <label>Select Target District:</label>
-            <select id="districtSelect" onchange="loadRecords()">
-                <option value="dhaka_pixels">DHAKA</option>
-                <option value="sirajganj_pixels">SIRAJGANJ</option>
-                <option value="chattogram_pixels">CHATTOGRAM</option>
-                <option value="rajshahi_pixels">RAJSHAHI</option>
-                </select>
-
-            <input type="number" id="mPlot" placeholder="Plot ID (1-10000)">
-            <input type="text" id="mBrand" placeholder="Brand Name">
-            <input type="text" id="mImg" placeholder="Logo Image URL">
-            <input type="text" id="mWeb" placeholder="Website Link">
-            <button class="btn" onclick="updateData()">PUBLISH TO MAP</button>
+            <h2>UPDATE DATA</h2>
+            <select id="dist"><option value="dhaka">DHAKA</option><option value="sirajganj">SIRAJGANJ</option></select>
+            <input type="number" id="id" placeholder="Plot ID (1-7000)">
+            <input type="text" id="name" placeholder="Brand Name">
+            <input type="text" id="img" placeholder="Logo URL">
+            <input type="text" id="link" placeholder="Website URL">
+            <button class="btn" onclick="save()">PUBLISH LIVE</button>
         </div>
-
         <div class="card">
-            <h2 id="viewTitle">LIVE RECORDS: DHAKA</h2>
-            <div id="liveRecords" class="record-list">Loading...</div>
+            <h2>LIVE RECORDS</h2>
+            <div id="recs" class="list">Loading...</div>
         </div>
     </div>
-
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
-    <script>
-        firebase.initializeApp({ databaseURL: "https://the-5k-elite-legacy-default-rtdb.firebaseio.com" });
-        const db = firebase.database();
-
-        function updateData() {
-            const dist = document.getElementById('districtSelect').value;
-            const pid = document.getElementById('mPlot').value;
-            const name = document.getElementById('mBrand').value;
-            const img = document.getElementById('mImg').value;
-            const web = document.getElementById('mWeb').value;
-
-            if(!pid || !name || !img) return alert("Fill all fields!");
-
-            db.ref(dist + '/' + pid).set({
-                name: name, imageUrl: img, link: web || "#", plotID: pid
-            }).then(() => {
-                alert("Updated Successfully in " + dist.replace('_pixels', '').toUpperCase());
-                document.getElementById('mPlot').value = "";
-                document.getElementById('mBrand').value = "";
-            });
-        }
-
-        function loadRecords() {
-            const dist = document.getElementById('districtSelect').value;
-            document.getElementById('viewTitle').innerText = "LIVE RECORDS: " + dist.replace('_pixels', '').toUpperCase();
-            
-            db.ref(dist).on('value', s => {
-                const list = document.getElementById('liveRecords');
-                list.innerHTML = "";
-                const data = s.val();
-                if(!data) { list.innerHTML = "No data found."; return; }
-                
-                Object.keys(data).forEach(id => {
-                    list.innerHTML += `<div class="item">
-                        <span>#${id} - ${data[id].name}</span>
-                        <button class="del-btn" onclick="deleteData('${id}')">DEL</button>
-                    </div>`;
-                });
-            });
-        }
-        loadRecords(); // Initial Load
-
-        function deleteData(id) {
-            const dist = document.getElementById('districtSelect').value;
-            if(confirm("Delete Plot #" + id + "?")) {
-                db.ref(dist + '/' + id).remove();
-            }
-        }
-    </script>
-</body>
+    </body>
 </html>
