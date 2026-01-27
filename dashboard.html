@@ -2,62 +2,56 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>AETHER REALM | Plot Canvas</title>
+    <title>AETHER REALM | Plot Selection</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body style="background: #000;">
+<body>
+    <header class="main-header">
+        <div class="logo" onclick="location.href='index.html'">AETHER PLOTS</div>
+        <div id="realmDisplay" class="gold-text">SELECTING REALM...</div>
+    </header>
 
-    <div class="canvas-header">
-        <h1 id="realmTitle">LOADING REALM...</h1>
-        <p>SELECT YOUR 100x100 DIGITAL ASSET</p>
+    <div class="map-section">
+        <div class="leader-title">VIP LEADER ASSETS</div>
+        <div class="leader-wrap" id="leaderContainer"></div>
+
+        <div class="grid-title">COMMUNITY PLOTS</div>
+        <div class="community-grid" id="mainGrid"></div>
     </div>
 
-    <div class="map-wrapper">
-        <div class="plot-canvas" id="plotCanvas">
-            </div>
-    </div>
-
-    <div id="buyModal" class="modal">
-        <div class="modal-content">
-            <h2 id="mID">PLOT #00</h2>
-            <h1 id="mPrice" class="gold-text">$0</h1>
-            <p>Permanent Ownership | Instant Deployment</p>
-            <button class="buy-btn" onclick="goToOrder()">PROCEED TO PAYMENT</button>
-            <button class="close-btn" onclick="closeModal()">CANCEL</button>
+    <div class="chat-system">
+        <div id="chatMessages">Connection Secure. Ghost Chat Active...</div>
+        <div class="chat-controls">
+            <input type="text" id="chatInput" placeholder="Write to the realm...">
+            <button onclick="sendMessage()">SEND</button>
         </div>
     </div>
 
     <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        document.getElementById('realmTitle').innerText = (urlParams.get('realm') || 'AETHER') + " REALM";
+        const params = new URLSearchParams(window.location.search);
+        const realm = params.get('realm') || 'AETHER';
+        document.getElementById('realmDisplay').innerText = realm.toUpperCase() + " REALM";
 
-        const canvas = document.getElementById('plotCanvas');
-        let selectedPlot = "";
-        let selectedPrice = "";
-
-        for (let i = 1; i <= 100; i++) {
-            const plot = document.createElement('div');
-            plot.className = 'plot-unit';
-            
-            let price = "";
-            if (i <= 5) { plot.classList.add('p-leader'); price = 9999; }
-            else if (i <= 20) { plot.classList.add('p-tier-1'); price = 999; }
-            else if (i <= 50) { plot.classList.add('p-tier-2'); price = 499; }
-            else { plot.classList.add('p-tier-3'); price = 199; }
-
-            plot.innerHTML = `<span>#${i}</span><div class="price-tag">$${price}</div>`;
-            plot.onclick = () => {
-                selectedPlot = i;
-                selectedPrice = price;
-                document.getElementById('mID').innerText = "PLOT #" + i;
-                document.getElementById('mPrice').innerText = "$" + price;
-                document.getElementById('buyModal').style.display = 'flex';
-            };
-            canvas.appendChild(plot);
+        // Generate 5 Leaders (100x100)
+        const lCont = document.getElementById('leaderContainer');
+        for (let i = 1; i <= 5; i++) {
+            lCont.innerHTML += `
+                <div class="plot leader-block" onclick="location.href='order.html?id=L${i}&p=9999'">
+                    <span class="p-id">VIP ${i}</span>
+                    <span class="p-price">$9,999</span>
+                </div>`;
         }
 
-        function closeModal() { document.getElementById('buyModal').style.display = 'none'; }
-        function goToOrder() { window.location.href = `order.html?id=${selectedPlot}&price=${selectedPrice}`; }
+        // Generate 95 Plots (80x80)
+        const mGrid = document.getElementById('mainGrid');
+        for (let i = 1; i <= 95; i++) {
+            let p = (i <= 20) ? 999 : (i <= 45) ? 499 : (i <= 70) ? 299 : 199;
+            mGrid.innerHTML += `
+                <div class="plot normal-block" onclick="location.href='order.html?id=${i}&p=${p}'">
+                    <span class="p-id">#${i}</span>
+                    <span class="p-price">$${p}</span>
+                </div>`;
+        }
     </script>
 </body>
 </html>
